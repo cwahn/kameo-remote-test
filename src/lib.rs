@@ -5,7 +5,8 @@ use kameo::{
 };
 use serde::{Deserialize, Serialize};
 
-pub const MULTI_ADDR: &str = "/ip4/0.0.0.0/tcp/8020";
+// pub const MULTI_ADDR: &str = "/ip4/0.0.0.0/tcp/8020";
+pub const MULTI_ADDR: &str = "/ip4/0.0.0.0/udp/8020/quic-v1";
 
 #[derive(Actor, RemoteActor)]
 pub struct SomeActor {}

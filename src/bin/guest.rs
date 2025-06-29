@@ -11,16 +11,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .filter_level(log::LevelFilter::Debug)
         .init();
 
-    debug!("Bootstrapping actor swarm...");
-    let actor_swarm = ActorSwarm::bootstrap()?;
+    // debug!("Bootstrapping actor swarm...");
+    // let actor_swarm = ActorSwarm::bootstrap()?;
 
-    let dial_opts = DialOpts::unknown_peer_id()
-        // .address(MULTI_ADDR.parse()?)
-        .address("/ip4/1.2.3.4/tcp/80".parse()?) // ! Sielently fails without error
-        .build();
+    // let dial_opts = DialOpts::unknown_peer_id()
+    //     .address(MULTI_ADDR.parse()?)
+    //     // .address("/ip4/1.2.3.4/tcp/80".parse()?) // ! Sielently fails without error
+    //     .build();
 
-    debug!("Dialing actor swarm with options: {:#?}", dial_opts);
-    actor_swarm.dial(dial_opts).await?;
+    // debug!("Dialing actor swarm with options: {:#?}", dial_opts);
+    // actor_swarm.dial(dial_opts).await?;
+
+    ActorSwarm::bootstrap()?.dial(
+        DialOpts::unknown_peer_id()
+            .address("/ip4/0.0.0.0/udp/8020/quic-v1".parse()?)
+            .build(),
+    );
+
+    tokio::time::sleep(std::time::Duration::from_secs(1)).await;
 
     debug!("Spawning SomeActor...");
     let mb_remote_actor_ref = RemoteActorRef::<SomeActor>::lookup("some_actor").await?;
