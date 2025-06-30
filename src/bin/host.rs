@@ -49,8 +49,40 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // )?;
 
     ActorSwarm::bootstrap()?
+        // .listen_on(MULTI_ADDR.parse()?)
         .listen_on("/ip4/0.0.0.0/udp/8020/quic-v1".parse()?)
         .await?;
+
+    // let actor_swarm = ActorSwarm::bootstrap_with_swarm(
+    //     SwarmBuilder::with_new_identity()
+    //         .with_tokio()
+    //         .with_tcp(
+    //             Default::default(),
+    //             // (libp2p_tls::Config::new, libp2p_noise::Config::new),
+    //             libp2p_noise::Config::new,
+    //             libp2p_yamux::Config::default,
+    //         )?
+    //         .with_behaviour(|keypair| {
+    //             Ok(ActorSwarmBehaviour {
+    //                 kademlia: kad::Behaviour::new(
+    //                     keypair.public().to_peer_id(),
+    //                     MemoryStore::new(keypair.public().to_peer_id()),
+    //                 ),
+    //                 mdns: mdns::tokio::Behaviour::new(
+    //                     mdns::Config::default(),
+    //                     keypair.public().to_peer_id(),
+    //                 )?,
+    //                 request_response: request_response::cbor::Behaviour::new(
+    //                     [(StreamProtocol::new("/kameo/1"), ProtocolSupport::Full)],
+    //                     request_response::Config::default(),
+    //                 ),
+    //             })
+    //         })?
+    //         .build(),
+    // )?
+    // // .listen_on(MULTI_ADDR.parse()?)
+    // .listen_on("/ip4/0.0.0.0/udp/8020/quic-v1".parse()?)
+    // .await?;
 
     debug!("Spawning SomeActor...");
     let some_actor_ref = SomeActor::spawn(SomeActor {});
