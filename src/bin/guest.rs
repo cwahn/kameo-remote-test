@@ -62,7 +62,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         [(StreamProtocol::new("/kameo/1"), ProtocolSupport::Full)],
                         // request_response::Config::default(),
                         request_response::Config::default()
-                            .with_max_concurrent_streams(1024)
+                            .with_max_concurrent_streams(128)
                             .with_request_timeout(std::time::Duration::from_secs(10)),
                     ),
                 })
@@ -77,7 +77,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mb_remote_actor_ref = RemoteActorRef::<SomeActor>::lookup("some_actor").await?;
     if let Some(remote_actor_ref) = mb_remote_actor_ref {
         debug!("Remote actor 'some_actor' found, sending message...");
-        let vector: Vec<u64> = (0..32).collect();
+        let vector: Vec<u64> = (0..128).collect();
         let start = Instant::now();
 
         let mut msg_count: u64 = 0;
@@ -97,7 +97,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             // tokio::time::sleep(std::time::Duration::from_micros(10)).await;
             // Do hot loop sleep
             let sleep_start = Instant::now();
-            while sleep_start.elapsed().as_micros() < 500 {}
+            while sleep_start.elapsed().as_micros() < 256 {}
         }
     } else {
         error!("Remote actor 'some_actor' not found.");

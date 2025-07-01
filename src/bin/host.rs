@@ -51,7 +51,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         [(StreamProtocol::new("/kameo/1"), ProtocolSupport::Full)],
                         // request_response::Config::default(),
                         request_response::Config::default()
-                            .with_max_concurrent_streams(1024)
+                            .with_max_concurrent_streams(512)
                             .with_request_timeout(std::time::Duration::from_secs(10)),
                     ),
                 })
