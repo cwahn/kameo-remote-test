@@ -33,3 +33,9 @@ tokio = { version = "1.45.1", features = [
     "time",
     "signal",
 ] }
+tracing-subscriber = "0.3.19"
+
+
+# Need for flamegraph
+[profile.release]
+debug = true

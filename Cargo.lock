@@ -1702,6 +1702,7 @@ dependencies = [
  "log",
  "serde",
  "tokio",
+ "tracing-subscriber",
 ]
 
 [[package]]

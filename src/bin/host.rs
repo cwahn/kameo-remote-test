@@ -10,11 +10,20 @@ use libp2p::{
     request_response::{self, ProtocolSupport},
 };
 use log::debug;
+use tracing_subscriber::EnvFilter;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    env_logger::Builder::from_default_env()
-        .filter_level(log::LevelFilter::Info)
+    tracing_subscriber::fmt()
+        .with_env_filter(
+            EnvFilter::from_default_env()
+                .add_directive("libp2p=debug".parse()?)
+                .add_directive("kameo_remote_test=debug".parse()?),
+        )
+        .with_target(true)
+        .with_file(true)
+        .with_line_number(true)
+        .compact() // Use compact format
         .init();
 
     debug!("Bootstrapping actor swarm...");
@@ -40,7 +49,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     )?,
                     request_response: request_response::cbor::Behaviour::new(
                         [(StreamProtocol::new("/kameo/1"), ProtocolSupport::Full)],
-                        request_response::Config::default(),
+                        // request_response::Config::default(),
+                        request_response::Config::default()
+                            .with_max_concurrent_streams(1024)
+                            .with_request_timeout(std::time::Duration::from_secs(10)),
                     ),
                 })
             })?
